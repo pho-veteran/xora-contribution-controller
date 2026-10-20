@@ -46,7 +46,7 @@ jobs:
           persist-credentials: false
       - run: node --check scripts/pr-bridge.mjs && node --test tests/*.test.mjs
   plan:
-    if: vars.BRIDGE_ENABLED == 'true' && github.repository == 'pho-veteran/xora-contribution-controller' && github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    if: vars.BRIDGE_ENABLED == 'true' && github.repository == 'TechX/xora-contribution-controller' && github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.pairs.outputs.matrix }}
