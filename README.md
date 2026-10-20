@@ -110,11 +110,9 @@ Sau khi mọi cặp có main, installation, secrets và notifier đúng; policy 
 
 Kiểm tra đủ 7 job `Reconcile <id>` thành công, A/main trùng B/main, notifier có ở cả A/B. Sau đó thử PR A → thêm commit → B request changes → A sửa/comment → B approve/merge → A/main cập nhật và PR A đóng.
 
-Notifier gửi event ngay khi PR/review/comment thay đổi hoặc B/main được push. Schedule 6 giờ là dự phòng; thời gian thực tế phụ thuộc hàng đợi Actions. Dispatch Success chưa chứng minh reconcile đã hoàn tất.
+Notifier gửi event ngay khi PR/review/comment thay đổi hoặc bất kỳ nhánh B có notifier mới được push. Schedule 6 giờ là dự phòng; thời gian thực tế phụ thuộc hàng đợi Actions. Dispatch Success chưa chứng minh reconcile đã hoàn tất.
 
-Giữ nguyên notifier hiện tại: push riêng lên nhánh B khác main chưa tự gửi event.
-Nhánh đó được đồng bộ ở lượt reconcile tiếp theo (schedule, event PR/main hoặc
-Run workflow tại controller). Không thêm workflow_dispatch ở repo A.
+Cập nhật [notifier mẫu](https://github.com/pho-veteran/github-org-contribution-lab/blob/main/templates/notifier/.github/workflows/notify-controller.yml) trên mọi nhánh B đang hoạt động: push dùng workflow tại chính ref được đẩy, nên chỉ sửa main không nâng cấp nhánh cũ. CI notifier tự dispatch controller; push ở A bị bỏ qua để tránh vòng lặp. Xem [hướng dẫn và bằng chứng lab](https://github.com/pho-veteran/github-org-contribution-lab/blob/main/all-branch-reconciliation.md).
 
 ## Cấu trúc
 
