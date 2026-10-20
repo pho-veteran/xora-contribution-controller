@@ -1,56 +1,42 @@
 {
-  "controllerRepo": "TechX-Corp/xora-contribution-controller",
+  "controllerRepo": "TechX/xora-contribution-controller",
   "bot": "xora-contribution-transport[bot]",
   "sourceBot": "xora-contribution-sync[bot]",
   "pairs": [
     {
       "id": "repo-xora-evaluation-framework-54ebec9d",
       "source": "XBrainVN/xora-evaluation-framework",
-      "target": "TechX-Corp/xora-evaluation-framework",
-      "sourceBranch": "main",
-      "targetBranch": "main"
+      "target": "TechX/xora-evaluation-framework"
     },
     {
       "id": "repo-xora-eval-framework-fe-4d34776a",
       "source": "XBrainVN/xora-eval-framework-fe",
-      "target": "TechX-Corp/xora-eval-framework-fe",
-      "sourceBranch": "main",
-      "targetBranch": "main"
+      "target": "TechX/xora-eval-framework-fe"
     },
     {
       "id": "repo-xora-learning-loop-bb627de1",
       "source": "XBrainVN/xora-learning-loop",
-      "target": "TechX-Corp/xora-learning-loop",
-      "sourceBranch": "main",
-      "targetBranch": "main"
+      "target": "TechX/xora-learning-loop"
     },
     {
       "id": "repo-xora-platform-b940689d",
       "source": "XBrainVN/xora-platform",
-      "target": "TechX-Corp/xora-platform",
-      "sourceBranch": "main",
-      "targetBranch": "main"
+      "target": "TechX/xora-platform"
     },
     {
       "id": "repo-xora-platform-fe-5aeed051",
       "source": "XBrainVN/xora-platform-fe",
-      "target": "TechX-Corp/xora-platform-fe",
-      "sourceBranch": "main",
-      "targetBranch": "main"
+      "target": "TechX/xora-platform-fe"
     },
     {
       "id": "repo-xora-resolve-be-c22aa205",
       "source": "XBrainVN/xora-resolve-be",
-      "target": "TechX-Corp/xora-resolve-be",
-      "sourceBranch": "dev",
-      "targetBranch": "dev"
+      "target": "TechX/xora-resolve-be"
     },
     {
       "id": "repo-xora-resolve-agent-149c9dc2",
       "source": "XBrainVN/xora-resolve-agent",
-      "target": "TechX-Corp/xora-resolve-agent",
-      "sourceBranch": "main",
-      "targetBranch": "main"
+      "target": "TechX/xora-resolve-agent"
     }
   ]
 }
