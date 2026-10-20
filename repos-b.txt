@@ -1,7 +1,7 @@
-https://github.com/TechX/xora-evaluation-framework
-https://github.com/TechX/xora-eval-framework-fe
-https://github.com/TechX/xora-learning-loop
-https://github.com/TechX/xora-platform
-https://github.com/TechX/xora-platform-fe
-https://github.com/TechX/xora-resolve-be
-https://github.com/TechX/xora-resolve-agent
+https://github.com/TechX-Corp/xora-evaluation-framework
+https://github.com/TechX-Corp/xora-eval-framework-fe
+https://github.com/TechX-Corp/xora-learning-loop
+https://github.com/TechX-Corp/xora-platform
+https://github.com/TechX-Corp/xora-platform-fe
+https://github.com/TechX-Corp/xora-resolve-be
+https://github.com/TechX-Corp/xora-resolve-agent
