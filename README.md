@@ -2,6 +2,8 @@
 
 B quyết định review/merge. Developer góp code tại A; controller chuyển PR, đồng bộ review/comment và đưa B/main về A/main sau khi B merge. Nhiều cặp repo dùng chung **3 GitHub App và 1 controller**.
 
+**Org A: `XBrainVN`. Org B: `TechX-Corp`.** Registry đã điền 7 cặp repo cùng tên giữa hai org.
+
 Đây là **source public để bàn giao**, chưa kết nối với repo private và chưa bật bridge. Controller vận hành phải đặt trong **repo private do B quản lý** vì log/trạng thái có thể chứa thông tin contribution.
 
 ## 1. Lấy code về repo controller private
@@ -23,8 +25,8 @@ Tại org B: **Settings → Developer settings → GitHub Apps → New GitHub Ap
 
 | Tên gợi ý | Only select repositories | Repository permissions |
 |---|---|---|
-| **Xora Contribution Sync** — App A | 7 repo A | Contents: **Read and write**; Pull requests: **Read and write**; Workflows: **Read and write** |
-| **Xora Contribution Transport** — App B | 7 repo B | Contents: **Read and write**; Pull requests: **Read and write** |
+| **Xora Contribution Sync** — App A | 7 repo tại `XBrainVN` | Contents: **Read and write**; Pull requests: **Read and write**; Workflows: **Read and write** |
+| **Xora Contribution Transport** — App B | 7 repo tại `TechX-Corp` | Contents: **Read and write**; Pull requests: **Read and write** |
 | **Xora Contribution Dispatch** | Chỉ `TechX-Corp/xora-contribution-controller` | Actions: **Read and write** |
 
 Cả ba: Metadata **Read-only**, quyền khác **No access**, tắt **Active webhook**. App A chọn **Any account** để admin A cài được; hai App còn lại chọn **Only on this account** nếu tạo tại org B. Tải PEM và ghi Client ID từng App.
@@ -47,7 +49,7 @@ Thay:
 
 | File | Giá trị cần điền |
 |---|---|
-| `bridge.config.json` | `controllerRepo` → `TechX-Corp/xora-contribution-controller`; mọi `A_OWNER` → org A thật; `bot`/`sourceBot` → slug App B/A thật, giữ hậu tố `[bot]` |
+| `bridge.config.json` | `controllerRepo` → `TechX-Corp/xora-contribution-controller`; giữ mapping `XBrainVN/*` → `TechX-Corp/*` đã điền; `bot`/`sourceBot` → slug App B/A thật, giữ hậu tố `[bot]` |
 | `.github/workflows/controller.yml` | `pho-veteran/xora-contribution-controller` → `TechX-Corp/xora-contribution-controller` |
 
 Giữ nguyên scripts, tests, pair IDs, tên secrets và biểu thức `${{ ... }}`. Node.js 24; không cần `npm install`.
@@ -74,19 +76,19 @@ Không đưa PEM/token vào Git hoặc repo public này. Push controller chạy 
 
 ## 4. Bootstrap A và cài notifier
 
-A đã có 7 repo private **rỗng, cùng tên B**. Với từng cặp:
+`XBrainVN` đã có 7 repo private **rỗng, cùng tên repo tại `TechX-Corp`**. Với từng cặp:
 
 1. Review workflow B trước khi sao lịch sử: deploy/CD chỉ chạy tại B; build/test contribution không được nhận secret hay token ghi.
 2. Dùng credential admin đã được cấp quyền, fetch/push toàn bộ lịch sử B/main vào A/main. Giữ SHA gốc; không dùng `--mirror`. [Lệnh bootstrap](https://github.com/pho-veteran/github-org-contribution-lab/blob/main/github-app-setup.md#41-khởi-tạo-a-từ-b-có-sẵn).
 3. Đặt variable `CONTROLLER_DISPATCH_APP_CLIENT_ID` và secret `CONTROLLER_DISPATCH_APP_PRIVATE_KEY` tại **cả A và B**, lấy từ App Dispatch.
-4. Copy [notifier mẫu](https://github.com/pho-veteran/github-org-contribution-lab/blob/main/templates/notifier/.github/workflows/notify-controller.yml) vào `.github/workflows/notify-controller.yml` tại B. Thay mọi `A_OWNER`, `A_REPO`, `B_OWNER`, `B_REPO`, `CONTROLLER_REPO` bằng cặp thật và tên controller.
+4. Copy [notifier mẫu](https://github.com/pho-veteran/github-org-contribution-lab/blob/main/templates/notifier/.github/workflows/notify-controller.yml) vào `.github/workflows/notify-controller.yml` tại B. Thay `A_OWNER` → `XBrainVN`, `B_OWNER` → `TechX-Corp`, `CONTROLLER_REPO` → `xora-contribution-controller`; `A_REPO` và `B_REPO` là cùng tên repo của cặp đang cấu hình.
 5. Mở PR notifier, maintainer B review/merge. Khi kích hoạt, controller đưa cùng workflow từ B/main sang A/main.
 
 App Dispatch chỉ được cài trên controller; private key Dispatch được lưu ở A/B để notifier gọi workflow controller. Key App A/B chỉ ở controller.
 
 ### Nếu muốn tự động các bước setup
 
-Dùng [5 script Bash và hướng dẫn](https://github.com/pho-veteran/github-org-contribution-lab/blob/main/github-app-quick-setup.md) từ repo docs, thêm `--controller xora-contribution-controller` vào lệnh `01-init.sh`.
+Dùng [5 script Bash và hướng dẫn](https://github.com/pho-veteran/github-org-contribution-lab/blob/main/github-app-quick-setup.md) từ repo docs, đặt `--org-a XBrainVN` và thêm `--controller xora-contribution-controller` vào lệnh `01-init.sh`.
 
 Chọn cách này **từ đầu với controller rỗng**, để `03-apply.sh` tự sinh/deploy controller, bootstrap và đặt secrets. Không push bản cấu hình thủ công ở mục 3 rồi chạy apply chồng lên: script dừng nếu nội dung controller khác bộ sinh.
 
