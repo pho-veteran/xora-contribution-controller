@@ -2,6 +2,14 @@
 
 B quyết định review/merge. Developer góp code tại A; controller chuyển PR, đồng bộ review/comment và đưa B/main về A/main sau khi B merge. Nhiều cặp repo dùng chung **3 GitHub App và 1 controller**.
 
+Controller cũng reconcile mọi branch head hiện có ở B sang cùng tên ở A.
+Nhánh chỉ có ở A được giữ nguyên; không đồng bộ xóa nhánh, tags hoặc mirror ngược.
+Nhánh trùng tên bị lệch lịch sử được lưu vào `recovery/b-sync-*` trước khi thay
+bằng SHA của B, dùng atomic push và lease. Nhánh nguồn của PR A đang mở được
+hoãn (`deferred-open-pr`) để giữ contribution; chạy lại sau khi PR đóng.
+Lỗi một nhánh không chặn các nhánh/PR khác nhưng vẫn làm run báo lỗi.
+Xem [hướng dẫn nâng cấp](https://github.com/pho-veteran/github-org-contribution-lab/blob/main/all-branch-reconciliation.md).
+
 **Org A: `XBrainVN`. Org B: `TechX`.** Registry đã điền 7 cặp repo cùng tên giữa hai org.
 
 Đây là **source public để bàn giao**, chưa kết nối với repo private và chưa bật bridge. Controller vận hành phải đặt trong **repo private do B quản lý** vì log/trạng thái có thể chứa thông tin contribution.
@@ -103,6 +111,10 @@ Sau khi mọi cặp có main, installation, secrets và notifier đúng; policy 
 Kiểm tra đủ 7 job `Reconcile <id>` thành công, A/main trùng B/main, notifier có ở cả A/B. Sau đó thử PR A → thêm commit → B request changes → A sửa/comment → B approve/merge → A/main cập nhật và PR A đóng.
 
 Notifier gửi event ngay khi PR/review/comment thay đổi hoặc B/main được push. Schedule 6 giờ là dự phòng; thời gian thực tế phụ thuộc hàng đợi Actions. Dispatch Success chưa chứng minh reconcile đã hoàn tất.
+
+Giữ nguyên notifier hiện tại: push riêng lên nhánh B khác main chưa tự gửi event.
+Nhánh đó được đồng bộ ở lượt reconcile tiếp theo (schedule, event PR/main hoặc
+Run workflow tại controller). Không thêm workflow_dispatch ở repo A.
 
 ## Cấu trúc
 
